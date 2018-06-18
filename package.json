@@ -1,0 +1,46 @@
+{
+  "name": "cwds-cares-custom-authentication-flow",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "develop": "npm-run-all --parallel security-check lint:watch test:watch",
+    "lint": "esw webpack.config.* src buildScripts --color",
+    "lint:watch": "npm run lint -- --watch",
+    "security-check": "nsp check",
+    "test": "mocha --reporter spec buildScripts/testSetup.js \"src/**/*.test.js\"",
+    "test:watch": "npm run test -- --watch",
+    "clean-dist": "rimraf ./dist && mkdir dist",
+    "prebuild": "npm-run-all clean-dist test lint",
+    "build-define": "build-for-lambda --in src/lambda/DefineAuthChallenge/index.js --name handler --out dist/DefineAuthChallenge.js",
+    "build-create": "build-for-lambda --in src/lambda/CreateAuthChallenge/index.js --name handler --out dist/CreateAuthChallenge.js",
+    "build-verify": "build-for-lambda --in src/lambda/VerifyAuthChallenge/index.js --name handler --out dist/VerifyAuthChallenge.js",
+    "build": "npm-run-all prebuild build-define build-create build-verify"
+  },
+  "author": "CWDS",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.250.1"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^2.0.0",
+    "babel-cli": "6.16.0",
+    "babel-core": "6.17.0",
+    "babel-loader": "6.2.5",
+    "babel-preset-latest": "6.16.0",
+    "babel-register": "6.16.3",
+    "build-for-lambda": "0.0.8",
+    "chai": "^3.5.0",
+    "eslint": "^3.8.1",
+    "eslint-plugin-import": "^2.0.1",
+    "eslint-watch": "^2.1.14",
+    "express": "^4.14.0",
+    "mocha": "^3.1.2",
+    "npm-run-all": "^3.1.1",
+    "nsp": "^2.6.2",
+    "open": "0.0.5",
+    "serverless-webpack": "^5.1.5",
+    "sinon": "^5.0.10",
+    "webpack": "1.13.2",
+    "webpack-dev-middleware": "1.8.4"
+  }
+}
