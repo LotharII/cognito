@@ -1,16 +1,21 @@
 var EmailService = require('../../aws/EmailService');
+var maskEmail = require('../../utils//maskEmail');
+
 
 exports.handler = function(event, context) {
     if( shouldDoOtpChallenge(event.request.session.slice(-1)[0]) ) {
         let token = generateToken();
+        //last session we request for the device id, no we send out the real challenge
+        let email = event.request.userAttributes.email;
+
         event.response.publicChallengeParameters = {};
+        event.response.publicChallengeParameters.maskedEmail = maskEmail.mask(email);
         event.response.privateChallengeParameters = {};
         event.response.privateChallengeParameters.answer = token;
         event.response.privateChallengeParameters.challenge = 'OTP_CHALLENGE';
         event.response.challengeMetadata = 'OTP_CHALLENGE';
 
-        //last session we request for the device id, no we send out the real challenge
-        let email = event.request.userAttributes.email;
+        
 
         EmailService.sendEmail(email, token, event, context);
     } else {
