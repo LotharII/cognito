@@ -6,6 +6,7 @@ import EmailService from './EmailService';
 
 process.env.NODE_ENV = 'test';
 process.env.SES_REGION = 'us-west-2';
+process.env.SOURCE_EMAIL = 'abc@test.com'
 
 describe('EmailService.js Tests', () => {
   let succeed;
@@ -48,7 +49,7 @@ describe('EmailService.js Tests', () => {
     expect(params.Destination.ToAddresses.length).to.equal(1);
     expect(params.Destination.ToAddresses[0]).to.equal(email);
     expect(params.Message.Body.Text.Data).to.include(token);
-    expect(params.Source).to.equal(email);
+    expect(params.Source).to.equal('abc@test.com');
   });
 
   it('sets failure on error sending email', () => {

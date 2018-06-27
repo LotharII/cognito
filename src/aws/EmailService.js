@@ -22,7 +22,7 @@ exports.sendEmail = function(email, token, event, context) {
             }
         },
         //environment variable
-        Source: email
+        Source: process.env.SOURCE_EMAIL
     };
 
     /* eslint-disable no-unused-vars */
