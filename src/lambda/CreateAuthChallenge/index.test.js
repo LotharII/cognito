@@ -15,7 +15,7 @@ describe('CreateAuthChallenge Tests', () => {
   let sendEmailStub;
 
 
-  before(() => {
+  beforeAll(() => {
     succeed = sinon.fake();
     fail = sinon.fake();
     context = Object.assign({}, baseContext, {succeed: succeed, fail: fail});
@@ -30,7 +30,7 @@ describe('CreateAuthChallenge Tests', () => {
     sendEmailFake.resetHistory();
   });
 
-  after(() => {
+  afterAll(() => {
     sendEmailStub.restore();
   });
 

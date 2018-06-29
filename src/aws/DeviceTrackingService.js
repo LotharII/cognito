@@ -1,9 +1,9 @@
-var AWS = require('aws-sdk');
-var logWrapper = require('../utils/logWrapper');
+const AWS = require('aws-sdk');
+const logWrapper = require('../utils/logWrapper');
 
 exports.track = function(deviceId, event, context, challengeName) {
-  var  dynamo = new AWS.DynamoDB();
-  var eParams = exports.paramsForGetItem(deviceId, event);
+  const  dynamo = new AWS.DynamoDB();
+  const eParams = exports.paramsForGetItem(deviceId, event);
    dynamo.getItem(eParams, function(err, data) {
     if (err) {
         logWrapper.logExceptOnTest(err, err.stack);
@@ -71,7 +71,7 @@ exports.manageNonVerifiedDevice = function(deviceId, event, context) {
   let idp = new AWS.CognitoIdentityServiceProvider({
     region: process.env.COGNITO_REGION
   });
-  var params = exports.paramsForGettingTrackedDevice(deviceId, event);
+  const params = exports.paramsForGettingTrackedDevice(deviceId, event);
 
   idp.adminGetDevice(params, function(err, data) {
      if (err) {
@@ -116,9 +116,9 @@ exports.paramsForGettingTrackedDevice = function(deviceId, event) {
  * @param {*} setResponseAnswerCorrect
  */
 exports.saveDeviceToDynamo = function(deviceId, time, event, context, setResponseAnswerCorrect ) {
-  var  dynamo = new AWS.DynamoDB();
+  const dynamo = new AWS.DynamoDB();
 
-  var params = exports.paramsForStoringTrackedDeviceCounter(deviceId, time, event);
+  const params = exports.paramsForStoringTrackedDeviceCounter(deviceId, time, event);
 
   dynamo.updateItem(params, function(err, data) {
        if (err) {

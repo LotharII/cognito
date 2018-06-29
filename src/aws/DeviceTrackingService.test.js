@@ -24,7 +24,7 @@ describe('DeviceTrackingService.js Tests', () => {
   };
 
 
-  before(() => {
+  beforeAll(() => {
     succeed = sinon.fake();
     fail = sinon.fake();
 
@@ -59,7 +59,7 @@ describe('DeviceTrackingService.js Tests', () => {
       let stubManageVerifiedDevice;
       let stubManageNonVerifiedDevice;
 
-      before(() => {
+      beforeAll(() => {
         fakeManageVerifiedDevice = sinon.fake();
         fakeManageNonVerifiedDevice = sinon.fake();
         stubManageVerifiedDevice = sinon.stub(DeviceTrackingService, "manageVerifiedDevice").callsFake(fakeManageVerifiedDevice);
@@ -75,7 +75,7 @@ describe('DeviceTrackingService.js Tests', () => {
       afterEach(() => {
       });
 
-      after(() => {
+      afterAll(() => {
         stubManageVerifiedDevice.restore();
         stubManageNonVerifiedDevice.restore();
       });
@@ -391,7 +391,7 @@ describe('DeviceTrackingService.js Tests', () => {
       let fakeSaveToDynamo;
       let stubSaveToDynamo;
 
-      before(() => {
+      beforeAll(() => {
         fakeSaveToDynamo = sinon.fake();
         stubSaveToDynamo = sinon.stub(DeviceTrackingService, "saveDeviceToDynamo").callsFake(fakeSaveToDynamo);
       });

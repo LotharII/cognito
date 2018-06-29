@@ -15,7 +15,7 @@ describe('EmailService.js Tests', () => {
   let fakeSesSendMail;
 
 
-  before(() => {
+  beforeAll(() => {
     fakeSesSendMail = sinon.fake();
 
     succeed = sinon.fake();

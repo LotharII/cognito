@@ -14,7 +14,7 @@ describe('VerifyAuthChallenge Tests', () => {
   let stubTrack;
   let context;
 
-  before(() => {
+  beforeAll(() => {
     done = sinon.fake();
     succeed = sinon.fake();
     fail = sinon.fake();
@@ -31,7 +31,7 @@ describe('VerifyAuthChallenge Tests', () => {
     track.resetHistory();
   });
 
-  after(() => {
+  afterAll(() => {
     stubTrack.restore();
   });
 

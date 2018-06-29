@@ -7,11 +7,11 @@ describe('logWrapper Tests', () => {
 
   let consoleLogSpy;
 
-  before(() => {
+  beforeAll(() => {
     consoleLogSpy = sinon.spy(console, "log");
   });
 
-  after(() => {
+  afterAll(() => {
     consoleLogSpy.restore();
   });
 

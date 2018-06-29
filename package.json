@@ -7,8 +7,9 @@
     "lint": "esw webpack.config.* src buildScripts --color",
     "lint:watch": "npm run lint -- --watch",
     "security-check": "nsp check",
-    "test": "mocha --reporter spec buildScripts/testSetup.js \"src/**/*.test.js\"",
-    "test:watch": "npm run test -- --watch",
+    "test": "run-s test:*",
+    "test:jest": "jest --env=jsdom --coverage --no-colors",
+    "test:jest:watch": "jest  --env=jsdom --no-colors --watch",
     "clean-dist": "rimraf ./dist && mkdir dist",
     "prebuild": "npm-run-all clean-dist test lint",
     "build-define": "build-for-lambda --in src/lambda/DefineAuthChallenge/index.js --name handler --out dist/DefineAuthChallenge.js",
@@ -19,7 +20,8 @@
   "author": "CWDS",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.250.1"
+    "aws-sdk": "^2.250.1",
+    "jest": "^23.2.0"
   },
   "devDependencies": {
     "aws-sdk-mock": "^2.0.0",
