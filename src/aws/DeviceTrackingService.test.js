@@ -24,7 +24,7 @@ describe('DeviceTrackingService.js Tests', () => {
   };
 
 
-  before(() => {
+  beforeAll(() => {
     succeed = sinon.fake();
     fail = sinon.fake();
 
@@ -59,7 +59,7 @@ describe('DeviceTrackingService.js Tests', () => {
       let stubManageVerifiedDevice;
       let stubManageNonVerifiedDevice;
 
-      before(() => {
+      beforeAll(() => {
         fakeManageVerifiedDevice = sinon.fake();
         fakeManageNonVerifiedDevice = sinon.fake();
         stubManageVerifiedDevice = sinon.stub(DeviceTrackingService, "manageVerifiedDevice").callsFake(fakeManageVerifiedDevice);
@@ -75,7 +75,7 @@ describe('DeviceTrackingService.js Tests', () => {
       afterEach(() => {
       });
 
-      after(() => {
+      afterAll(() => {
         stubManageVerifiedDevice.restore();
         stubManageNonVerifiedDevice.restore();
       });
@@ -169,15 +169,40 @@ describe('DeviceTrackingService.js Tests', () => {
   });
 
   describe('- manageVerifiedDevice Tests', () => {
+    let fakeSaveDeviceToDynamo;
+    let stubSaveDeviceToDynamo;
+    let stubDateNow;
+
+    beforeAll(() => {
+      fakeSaveDeviceToDynamo = sinon.fake();
+      stubSaveDeviceToDynamo = sinon.stub(DeviceTrackingService, "saveDeviceToDynamo").callsFake(fakeSaveDeviceToDynamo);
+      
+    });
+
+    beforeEach(() => {
+      fakeSaveDeviceToDynamo.resetHistory();
+    })
+
+    afterEach(() => {
+    });
+
+    afterAll(() => {
+      stubSaveDeviceToDynamo.restore();
+      stubDateNow.restore();
+    });
+
     it('- handles overAllowedAge true', () => {
       //setup
       let record = {
         Item: {
           date: {
             N: 0
+          },
+          DeviceId: {
+            S: 'abc'
           }
         }
-      }
+      };
 
       //run
       DeviceTrackingService.manageVerifiedDevice(record, event, context);
@@ -187,12 +212,54 @@ describe('DeviceTrackingService.js Tests', () => {
       expect(succeed.calledOnce, 'succeed not called').to.betrue;
     });
 
+    describe('- manageVerifiedDevice Tests update true', () => {
+      let stubDateNow;
+  
+      beforeAll(() => {
+        stubDateNow = sinon.stub(Date, "now").returns(9999999999);
+      });
+  
+      afterAll(() => {
+        stubDateNow.restore();
+      });
+
+      it('- saveDeviceToDynamo called when  overAllowedAge true and update true', () => {
+      
+        let record = {
+          Item: {
+            date: {
+              N: 0
+            },
+            DeviceId: {
+              S: 'device_id'
+            }
+          }
+        };
+
+        //run
+        DeviceTrackingService.manageVerifiedDevice(record, event, context, true);
+
+        //assert
+        expect(fakeSaveDeviceToDynamo.calledOnce, 'saveDeviceToDynamo method not called').to.be.true;
+        expect(fakeSaveDeviceToDynamo.args, 'args incorrect size').to.have.lengthOf(1);
+        expect(fakeSaveDeviceToDynamo.args[0], 'function params incorrect size').to.have.lengthOf(5);
+        expect(fakeSaveDeviceToDynamo.args[0][0], 'first function parameter incorrect').to.equal(deviceId);
+        expect(fakeSaveDeviceToDynamo.args[0][1], '2nd function parameter incorrect').to.equal(9999999999);
+        expect(fakeSaveDeviceToDynamo.args[0][2], '3rd function parameter incorrect').to.equal(event);
+        expect(fakeSaveDeviceToDynamo.args[0][3], '4th function parameter incorrect').to.equal(context);
+        expect(fakeSaveDeviceToDynamo.args[0][4], '5th function parameter incorrect').to.equal(false);
+      });
+    });
+
     it('- handles overAllowedAge false', () => {
         //setup
         let record = {
           Item: {
             date: {
               N: Date.now()
+            },
+            DeviceId: {
+              S: 'abc'
             }
           }
         };
@@ -391,7 +458,7 @@ describe('DeviceTrackingService.js Tests', () => {
       let fakeSaveToDynamo;
       let stubSaveToDynamo;
 
-      before(() => {
+      beforeAll(() => {
         fakeSaveToDynamo = sinon.fake();
         stubSaveToDynamo = sinon.stub(DeviceTrackingService, "saveDeviceToDynamo").callsFake(fakeSaveToDynamo);
       });

@@ -15,7 +15,7 @@ describe('CreateAuthChallenge Tests', () => {
   let sendEmailStub;
 
 
-  before(() => {
+  beforeAll(() => {
     succeed = sinon.fake();
     fail = sinon.fake();
     context = Object.assign({}, baseContext, {succeed: succeed, fail: fail});
@@ -30,7 +30,7 @@ describe('CreateAuthChallenge Tests', () => {
     sendEmailFake.resetHistory();
   });
 
-  after(() => {
+  afterAll(() => {
     sendEmailStub.restore();
   });
 
@@ -80,7 +80,6 @@ describe('CreateAuthChallenge Tests', () => {
       expect(sendEmailFake.calledOnce, 'track called').to.be.true;
       expect(sendEmailFake.args, 'args incorrect size').to.have.lengthOf(1);
       expect(sendEmailFake.args[0], 'function params incorrect size').to.have.lengthOf(4);
-      //email, token, event, context);
       expect(sendEmailFake.args[0][0], '1st function parameter incorrect').to.equal('john.doe@domain.com');
       expect(sendEmailFake.args[0][1], '2nd function parameter incorrect').is.not.null;
       expect(sendEmailFake.args[0][2], '3rd function parameter incorrect').to.equal(testEvent);

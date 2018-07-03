@@ -8,7 +8,7 @@ describe('DefineCustomAuth Tests', () => {
   let done;
   let context;
 
-  before(() => {
+  beforeAll(() => {
     done = sinon.fake();
     context = Object.assign({}, baseContext, {done: done})
   });
