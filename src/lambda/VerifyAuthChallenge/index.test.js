@@ -14,7 +14,7 @@ describe('VerifyAuthChallenge Tests', () => {
   let stubTrack;
   let context;
 
-  before(() => {
+  beforeAll(() => {
     done = sinon.fake();
     succeed = sinon.fake();
     fail = sinon.fake();
@@ -31,7 +31,7 @@ describe('VerifyAuthChallenge Tests', () => {
     track.resetHistory();
   });
 
-  after(() => {
+  afterAll(() => {
     stubTrack.restore();
   });
 
@@ -120,55 +120,62 @@ describe('VerifyAuthChallenge Tests', () => {
         });
 
         describe('- no device id passed in', () => {
-          it('- id is null', () => {
-            //setup
-            let privateChallengeParameters = {
-             challenge: 'OTP_CHALLENGE',
-             answer: 'expected_answer'
-             };
+          describe('- when id is null', () => {
+            it('- calls success', () => {
+              //setup
+              let privateChallengeParameters = {
+              challenge: 'OTP_CHALLENGE',
+              answer: 'expected_answer'
+              };
 
-             let testRequest = Object.assign({}, baseRequest, {privateChallengeParameters: privateChallengeParameters, challengeAnswer: "expected_answer"});
-             let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: Object.assign({}, baseResponse)});
+              let testRequest = Object.assign({}, baseRequest, {privateChallengeParameters: privateChallengeParameters, challengeAnswer: "expected_answer"});
+              let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: Object.assign({}, baseResponse)});
 
-             //run
-             VerifyAuthChallenge.handler(testEvent, context)
+              //run
+              VerifyAuthChallenge.handler(testEvent, context)
 
-             //assert
-             expect(succeed.calledOnce).to.be.true;
-           });
-           it('- id is \'null\'', () => {
-            //setup
-            let privateChallengeParameters = {
-             challenge: 'OTP_CHALLENGE',
-             answer: 'expected_answer'
-             };
+              //assert
+              expect(succeed.calledOnce).to.be.true;
+            });
+          });
+           
+          describe('- id is \'null\'', () => {
+            it('- calls success', () => {
+              //setup
+              let privateChallengeParameters = {
+              challenge: 'OTP_CHALLENGE',
+              answer: 'expected_answer'
+              };
 
-             let testRequest = Object.assign({}, baseRequest, {privateChallengeParameters: privateChallengeParameters, challengeAnswer: "expected_answer null"});
-             let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: Object.assign({}, baseResponse)});
+              let testRequest = Object.assign({}, baseRequest, {privateChallengeParameters: privateChallengeParameters, challengeAnswer: "expected_answer null"});
+              let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: Object.assign({}, baseResponse)});
 
-             //run
-             VerifyAuthChallenge.handler(testEvent, context)
+              //run
+              VerifyAuthChallenge.handler(testEvent, context)
 
-             //assert
-             expect(succeed.calledOnce).to.be.true;
-           });
+              //assert
+              expect(succeed.calledOnce).to.be.true;
+            });
+          });
 
-           it('- id is \'undefined\'', () => {
-            //setup
-            let privateChallengeParameters = {
-             challenge: 'OTP_CHALLENGE',
-             answer: 'expected_answer'
-             };
+          describe('- id is \'undefined\'', () => {
+            it('- calls success', () => {
+              //setup
+              let privateChallengeParameters = {
+              challenge: 'OTP_CHALLENGE',
+              answer: 'expected_answer'
+              };
 
-             let testRequest = Object.assign({}, baseRequest, {privateChallengeParameters: privateChallengeParameters, challengeAnswer: "expected_answer undefined"});
-             let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: Object.assign({}, baseResponse)});
+              let testRequest = Object.assign({}, baseRequest, {privateChallengeParameters: privateChallengeParameters, challengeAnswer: "expected_answer undefined"});
+              let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: Object.assign({}, baseResponse)});
 
-             //run
-             VerifyAuthChallenge.handler(testEvent, context)
+              //run
+              VerifyAuthChallenge.handler(testEvent, context)
 
-             //assert
-             expect(succeed.calledOnce).to.be.true;
-           });
+              //assert
+              expect(succeed.calledOnce).to.be.true;
+            });
+          });
 
 
         });

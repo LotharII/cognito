@@ -13,11 +13,11 @@
 `src/lambda/VerifyAuthChallenge/index.handler`
 
 # Prerequisites
-* NODE 6.10. ( Running on the Lambda Node.js 6.10 runtime )
+* NODE 8.10. ( Running on the Lambda Node.js 8.10 runtime )
 
 
 #Setup
-`npm install`
+`yarn install`
 
 # Running the Lambda Functions
 
@@ -25,11 +25,11 @@ Please see [AWS SAM](https://aws.amazon.com/about-aws/whats-new/2017/08/introduc
 
 #Unit Tests
 
-`npm test`
+`yarn test`
 
 #Building/Deployment
 
-`npm run build`
+`yarn run build`
 
 This will add each function into `dist`.  You can then copy them into AWS Lambda.
 

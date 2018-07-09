@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "develop": "npm-run-all --parallel security-check lint:watch test:watch",
-    "lint": "esw webpack.config.* src buildScripts --color",
+    "develop": "npm-run-all --parallel security-check lint:watch test",
+    "lint": "esw webpack.config.* src --color",
     "lint:watch": "npm run lint -- --watch",
     "security-check": "nsp check",
-    "test": "mocha --reporter spec buildScripts/testSetup.js \"src/**/*.test.js\"",
-    "test:watch": "npm run test -- --watch",
+    "test": "jest --env=jsdom --watch",
+    "test:coverage": "jest --env=jsdom --coverage",
     "clean-dist": "rimraf ./dist && mkdir dist",
     "prebuild": "npm-run-all clean-dist test lint",
     "build-define": "build-for-lambda --in src/lambda/DefineAuthChallenge/index.js --name handler --out dist/DefineAuthChallenge.js",
@@ -16,8 +16,13 @@
     "build-verify": "build-for-lambda --in src/lambda/VerifyAuthChallenge/index.js --name handler --out dist/VerifyAuthChallenge.js",
     "build": "npm-run-all prebuild build-define build-create build-verify"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
+  },
   "author": "CWDS",
-  "license": "MIT",
+  "license": "AGPL 3.0",
   "dependencies": {
     "aws-sdk": "^2.250.1"
   },
@@ -33,7 +38,7 @@
     "eslint": "^5.0.1",
     "eslint-plugin-import": "^2.13.0",
     "eslint-watch": "^2.1.14",
-    "mocha": "^5.2.0",
+    "jest": "^23.2.0",
     "npm-run-all": "^4.1.3",
     "nsp": "^3.2.1",
     "sinon": "^6.0.1",
