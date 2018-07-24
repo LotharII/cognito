@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 
 import CreateAuthChallenge from './index';
-import EmailService from '../../aws/EmailService';
+import OtpChallengeService from '../../aws/OtpChallengeService';
 import sinon from 'sinon';
 
 
@@ -11,8 +11,8 @@ describe('CreateAuthChallenge Tests', () => {
   let succeed;
   let fail;
   let context;
-  let sendEmailFake;
-  let sendEmailStub;
+  let optChallengeFake;
+  let optChallengeStub;
 
 
   beforeAll(() => {
@@ -20,18 +20,18 @@ describe('CreateAuthChallenge Tests', () => {
     fail = sinon.fake();
     context = Object.assign({}, baseContext, {succeed: succeed, fail: fail});
 
-    sendEmailFake = sinon.fake();
-    sendEmailStub = sinon.stub(EmailService, "sendEmail").callsFake(sendEmailFake);
+    optChallengeFake = sinon.fake();
+    optChallengeStub = sinon.stub(OtpChallengeService, "setupOtpChallenge").callsFake(optChallengeFake);
   });
 
   beforeEach(() => {
     succeed.resetHistory();
     fail.resetHistory();
-    sendEmailFake.resetHistory();
+    optChallengeFake.resetHistory();
   });
 
   afterAll(() => {
-    sendEmailStub.restore();
+    optChallengeStub.restore();
   });
 
   describe('- Device Challenge', () => {
@@ -54,7 +54,7 @@ describe('CreateAuthChallenge Tests', () => {
   });
 
   describe('- OTP Challenge', () => {
-    it('sets up otp challenge metadata correctly', () => {
+    it('calls setupOtpChallenge', () => {
       //setup
       let testSession = [srpaSession, passwordVerifierSession, customChallengeSession];
       let testRequest = Object.assign({}, baseRequest, {session: testSession});
@@ -64,26 +64,12 @@ describe('CreateAuthChallenge Tests', () => {
       CreateAuthChallenge.handler(testEvent, context);
 
       //assert
-      expect(testEvent.response.challengeMetadata).to.equal('OTP_CHALLENGE');
-    });
-
-    it('calls send email', () => {
-      //setup
-      let testSession = [srpaSession, passwordVerifierSession, customChallengeSession];
-      let testRequest = Object.assign({}, baseRequest, {session: testSession});
-      let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: {}});
-
-      //run
-      CreateAuthChallenge.handler(testEvent, context);
-
-      //assert
-      expect(sendEmailFake.calledOnce, 'track called').to.be.true;
-      expect(sendEmailFake.args, 'args incorrect size').to.have.lengthOf(1);
-      expect(sendEmailFake.args[0], 'function params incorrect size').to.have.lengthOf(4);
-      expect(sendEmailFake.args[0][0], '1st function parameter incorrect').to.equal('john.doe@domain.com');
-      expect(sendEmailFake.args[0][1], '2nd function parameter incorrect').is.not.null;
-      expect(sendEmailFake.args[0][2], '3rd function parameter incorrect').to.equal(testEvent);
-      expect(sendEmailFake.args[0][3], '4th function parameter incorrect').to.equal(context);
+      expect(optChallengeFake.calledOnce, 'otp challenge called').to.be.true;
+      expect(optChallengeFake.args, 'args incorrect size').to.have.lengthOf(1);
+      expect(optChallengeFake.args[0], 'function params incorrect size').to.have.lengthOf(3);
+      expect(optChallengeFake.args[0][0], '1st function parameter incorrect').to.equal('john.doe@domain.com');
+      expect(optChallengeFake.args[0][1], '2nd function parameter incorrect').is.not.null;
+      expect(optChallengeFake.args[0][2], '3rd function parameter incorrect').to.equal(context);
     });
   });
 });

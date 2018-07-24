@@ -7,14 +7,18 @@
     "lint": "esw webpack.config.* src --color",
     "lint:watch": "npm run lint -- --watch",
     "security-check": "nsp check",
-    "test": "jest --env=jsdom --watch",
+    "test": "jest --env=jsdom",
+    "test:watch": "jest --env=jsdom --watch",
     "test:coverage": "jest --env=jsdom --coverage",
     "clean-dist": "rimraf ./dist && mkdir dist",
     "prebuild": "npm-run-all clean-dist test lint",
-    "build-define": "build-for-lambda --in src/lambda/DefineAuthChallenge/index.js --name handler --out dist/DefineAuthChallenge.js",
-    "build-create": "build-for-lambda --in src/lambda/CreateAuthChallenge/index.js --name handler --out dist/CreateAuthChallenge.js",
-    "build-verify": "build-for-lambda --in src/lambda/VerifyAuthChallenge/index.js --name handler --out dist/VerifyAuthChallenge.js",
-    "build": "npm-run-all prebuild build-define build-create build-verify"
+    "build-define": "build-for-lambda --in src/lambda/DefineAuthChallenge/index.js --name handler --out dist/define/index.js",
+    "build-create": "build-for-lambda --in src/lambda/CreateAuthChallenge/index.js --name handler --out dist/create/index.js",
+    "build-verify": "build-for-lambda --in src/lambda/VerifyAuthChallenge/index.js --name handler --out dist/verify/index.js",
+    "zip-create": "bestzip dist/create.zip dist/create/*",
+    "zip-define": "bestzip dist/define.zip dist/define/*",
+    "zip-verify": "bestzip dist/verify.zip dist/verify/*",
+    "build": "npm-run-all prebuild build-define build-create build-verify zip-create zip-define zip-verify"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -33,6 +37,7 @@
     "babel-loader": "6.2.5",
     "babel-preset-env": "^1.7.0",
     "babel-register": "6.16.3",
+    "bestzip": "^1.1.4",
     "build-for-lambda": "0.0.8",
     "chai": "^3.5.0",
     "eslint": "^5.0.1",
