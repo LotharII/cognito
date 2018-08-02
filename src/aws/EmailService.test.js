@@ -38,7 +38,13 @@ describe('EmailService.js Tests', () => {
     AWS.mock('SES', 'sendEmail', fakeSesSendMail);
 
     //run
-    EmailService.sendEmail(email, token, {}, context);
+    EmailService.sendEmail(email, token, {
+      request: {
+        userAttributes: {
+          given_name: 'John'
+        }
+      }
+    }, context);
 
 
     //assert
@@ -61,7 +67,13 @@ describe('EmailService.js Tests', () => {
     });
 
     //run
-    EmailService.sendEmail(email, token, {}, context);
+    EmailService.sendEmail(email, token, {
+      request: {
+        userAttributes: {
+          given_name: 'John'
+        }
+      }
+    }, context);
 
     //assert
     expect(fail.calledOnce).to.equal(true);
@@ -76,7 +88,13 @@ describe('EmailService.js Tests', () => {
     });
 
     //run
-    EmailService.sendEmail(email, token, {}, context);
+    EmailService.sendEmail(email, token, {
+      request: {
+        userAttributes: {
+          given_name: 'John'
+        }
+      }
+    }, context);
 
     //assert
     expect(succeed.calledOnce).to.equal(true);

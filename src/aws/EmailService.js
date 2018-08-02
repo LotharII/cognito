@@ -13,7 +13,7 @@ exports.sendEmail = function(email, token, event, context) {
             Body: {
                 Text: {
                   //template or environment variable
-                    Data: "Your Device validation token is " + token
+                  Data: `Hello ${event.request.userAttributes.given_name},\n\nYour Device Validation Token is ${token}\nSimply copy this token and paste it into the device validation input field.`
                 }
             },
             Subject: {
