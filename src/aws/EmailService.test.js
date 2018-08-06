@@ -54,7 +54,7 @@ describe('EmailService.js Tests', () => {
     let params = fakeSesSendMail.args[0][0];
     expect(params.Destination.ToAddresses.length).to.equal(1);
     expect(params.Destination.ToAddresses[0]).to.equal(email);
-    expect(params.Message.Body.Text.Data).to.include(token);
+    expect(params.Message.Body.Html.Data).to.include(token);
     expect(params.Source).to.equal('abc@test.com');
   });
 

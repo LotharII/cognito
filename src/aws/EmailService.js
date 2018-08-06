@@ -11,14 +11,14 @@ exports.sendEmail = function(email, token, event, context) {
         },
         Message: {
             Body: {
-                Text: {
-                  //template or environment variable
-                  Data: `Hello ${event.request.userAttributes.given_name},\n\nYour Device Validation Token is ${token}\nSimply copy this token and paste it into the device validation input field.`
+                Html: {
+                   //template or environment variable
+                  Data: `<h2>CWS-CARES Secure Account Verification</h2><h1>Verification Code</h1><div>Here is your Access Code:</div><h1>${token}</h1><div>This is a validation code, not a password.</div><div>Simply copy this code and paste it into the Account Verification input field.</div><br><br><div>Thanks for helping us verify your CWS-CARES account.</div><div>CWS-CARES</div>`
                 }
             },
             Subject: {
               //template or environment variable
-                Data: "CWDS - CARES Device Validation Token"
+                Data: "CWDS - CARES Secure Account Verification"
             }
         },
         //environment variable
