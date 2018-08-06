@@ -18,7 +18,7 @@ exports.sendEmail = function(email, token, event, context) {
             },
             Subject: {
               //template or environment variable
-                Data: "CWDS - CARES Secure Account Verification"
+                Data: "CWS - CARES Secure Account Verification"
             }
         },
         //environment variable
