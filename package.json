@@ -1,24 +1,30 @@
 {
   "name": "cwds-cares-custom-authentication-flow",
   "version": "1.0.0",
-  "description": "",
+  "description": "Cognito funcitons to support custom authentication flow for CWDS-CARES",
   "scripts": {
-    "develop": "npm-run-all --parallel security-check lint:watch test",
     "lint": "esw webpack.config.* src --color",
     "lint:watch": "npm run lint -- --watch",
-    "security-check": "nsp check",
     "test": "jest --env=jsdom",
     "test:watch": "jest --env=jsdom --watch",
-    "test:coverage": "jest --env=jsdom --coverage",
-    "clean-dist": "rimraf ./dist && mkdir dist",
-    "prebuild": "npm-run-all clean-dist test lint",
-    "build-define": "build-for-lambda --in src/lambda/DefineAuthChallenge/index.js --name handler --out dist/define/index.js",
-    "build-create": "build-for-lambda --in src/lambda/CreateAuthChallenge/index.js --name handler --out dist/create/index.js",
-    "build-verify": "build-for-lambda --in src/lambda/VerifyAuthChallenge/index.js --name handler --out dist/verify/index.js",
-    "zip-create": "bestzip dist/create.zip dist/create/*",
-    "zip-define": "bestzip dist/define.zip dist/define/*",
-    "zip-verify": "bestzip dist/verify.zip dist/verify/*",
-    "build": "npm-run-all prebuild build-define build-create build-verify zip-create zip-define zip-verify"
+    "test:coverage": "jest --env=jsdom --coverage"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^4.1.0",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.6.0",
+    "chai": "^4.1.2",
+    "eslint": "^5.0.1",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-watch": "^4.0.2",
+    "jest": "^23.6.0",
+    "serverless": "^1.32.0",
+    "serverless-webpack": "^3.1.1",
+    "sinon": "^6.3.4",
+    "webpack": "^3.3.0"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -28,25 +34,6 @@
   "author": "CWDS",
   "license": "AGPL 3.0",
   "dependencies": {
-    "aws-sdk": "^2.250.1"
-  },
-  "devDependencies": {
-    "aws-sdk-mock": "^2.0.0",
-    "babel-cli": "6.16.0",
-    "babel-core": "6.17.0",
-    "babel-loader": "6.2.5",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "6.16.3",
-    "bestzip": "^1.1.4",
-    "build-for-lambda": "0.0.8",
-    "chai": "^3.5.0",
-    "eslint": "^5.0.1",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-watch": "^2.1.14",
-    "jest": "^23.2.0",
-    "npm-run-all": "^4.1.3",
-    "nsp": "^3.2.1",
-    "sinon": "^6.0.1",
-    "webpack": "1.13.2"
+    "aws-sdk": "^2.319.0"
   }
 }

@@ -1,0 +1,17 @@
+service:
+  name: cognito2
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:env, 'preint'}
+  region: ${file(./config/config.yml):${self:provider.stage}.aws.REGION, 'us-west-2'}
+
+
+functions:
+  defineAuthChallenge:
+    handler: src/lambda/DefineAuthChallenge/index.handler
