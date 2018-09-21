@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "develop": "npm-run-all --parallel security-check lint:watch test",
+    "license-dump": "license-checker --csv --out legal/licenses.csv",
     "lint": "esw webpack.config.* src --color",
     "lint:watch": "npm run lint -- --watch",
     "security-check": "nsp check",
