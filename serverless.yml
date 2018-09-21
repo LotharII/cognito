@@ -10,17 +10,38 @@ provider:
   name: aws
   runtime: nodejs8.10
   stage: ${opt:env, 'preint'}
-  region: ${file(./config/config.yml):${self:provider.stage}.aws.REGION, 'us-west-2'}
+  region: ${file(./config/serverless.config.yml):${self:provider.stage}.aws.REGION}
 
+custom:
+  accountId: ${file(./config/serverless.config.yml):${self:provider.stage}.aws.ACCOUNT_ID}
+  userPoolId: ${file(./config/serverless.config.yml):${self:provider.stage}.aws.USER_POOL_ID}
+  sourceEmail: ${file(./config/serverless.config.yml):${self:provider.stage}.aws.SOURCE_EMAIL}
+  automationOtp: ${file(./config/serverless.config.yml):${self:provider.stage}.aws.AUTOMATION_OTP}
+  maxValidTimeDevice: ${file(./config/serverless.config.yml):${self:provider.stage}.aws.MAX_VALID_TIME_DEVICE}
 
 functions:
   defineAuthChallenge:
     handler: src/lambda/DefineAuthChallenge/index.handler
+    environment: 
+      SES_REGION: ${self:provider.region}
   createAuthChallenge:
     handler: src/lambda/CreateAuthChallenge/index.handler
+    environment: 
+      SES_REGION: ${self:provider.region}
+      AUTOMATION_OTP: ${self:custom.automationOtp}
+      SOURCE_EMAIL: ${self:custom.sourceEmail}
+      USER_POOL_ID: ${self:custom.userPoolId}
     iamRoleStatements:
-      - Effect: "Allow"
-        Action: "ses:SendEmail"
+      - Effect: Allow
+        Action: ses:SendEmail
         Resource: "*"
+      - Effect: Allow
+        Action: cognito-idp:AdminGetUser
+        Resource: arn:aws:cognito-idp:us-west-2:${self:custom.accountId}:userpool/${self:custom.userPoolId}
   verifyAuthChallenge:
     handler: src/lambda/VerifyAuthChallenge/index.handler
+    environment: 
+      COGNITO_REGION: ${self:provider.region}
+      DYNAMO_TABLENAME: TODO
+      MAX_VALID_TIME_DEVICE: ${self:custom.maxValidTimeDevice}
+      USER_POOL_ID: ${self:custom.userPoolId}
