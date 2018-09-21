@@ -1,9 +1,10 @@
 service:
-  name: cognito2
+  name: cognito
 
 # Add the serverless-webpack plugin
 plugins:
   - serverless-webpack
+  - serverless-iam-roles-per-function
 
 provider:
   name: aws
@@ -15,3 +16,11 @@ provider:
 functions:
   defineAuthChallenge:
     handler: src/lambda/DefineAuthChallenge/index.handler
+  createAuthChallenge:
+    handler: src/lambda/CreateAuthChallenge/index.handler
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action: "ses:SendEmail"
+        Resource: "*"
+  verifyAuthChallenge:
+    handler: src/lambda/VerifyAuthChallenge/index.handler
