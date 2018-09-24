@@ -14,23 +14,25 @@
 
 # Prerequisites
 * NODE 8.10. ( Running on the Lambda Node.js 8.10 runtime )
+* [Serverless Framework](https://serverless.com/)
 
 
-#Setup
+# Setup
 `yarn install`
 
-# Running the Lambda Functions
-
-Please see [AWS SAM](https://aws.amazon.com/about-aws/whats-new/2017/08/introducing-aws-sam-local-a-cli-tool-to-test-aws-lambda-functions-locally/) for information on running the Lambda Functions locally.
-
-#Unit Tests
+# Unit Tests
 
 `yarn test`
 
+# Configuration
+The lambda functions are built per environment.  Environment variables are used to ensure proper configuration.  A single configuration file is used to define values for each environment:  *config/serverless.config.yml*
+
+Please see *config/example.config.yml*.
+
 #Building/Deployment
 
-`yarn run build`
+`serverless --env=ENV_EXAMPLE deploy`
 
-This will add each function into `dist`.  You can then copy them into AWS Lambda.
+Where *ENV_EXAMPLE* is found in config/serverless.config.yml
 
 

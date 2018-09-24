@@ -1,0 +1,8 @@
+example_env:
+  aws:
+    ACCOUNT_ID: 1234567898
+    REGION: us-west-2
+    USER_POOL_ID: example_user_pool_id
+    SOURCE_EMAIL: no-reply@cwds.ca.gov
+    AUTOMATION_OTP: SOME_PASSWORD
+    MAX_VALID_TIME_DEVICE: 86400000
