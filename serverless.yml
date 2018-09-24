@@ -18,12 +18,15 @@ custom:
   sourceEmail: ${file(./config/serverless.config.yml):${self:provider.stage}.aws.SOURCE_EMAIL}
   automationOtp: ${file(./config/serverless.config.yml):${self:provider.stage}.aws.AUTOMATION_OTP}
   maxValidTimeDevice: ${file(./config/serverless.config.yml):${self:provider.stage}.aws.MAX_VALID_TIME_DEVICE}
+  dynamoTableName: cognito-idp_device_tracker.${self:provider.stage}
 
 functions:
+  
   defineAuthChallenge:
     handler: src/lambda/DefineAuthChallenge/index.handler
     environment: 
       SES_REGION: ${self:provider.region}
+  
   createAuthChallenge:
     handler: src/lambda/CreateAuthChallenge/index.handler
     environment: 
@@ -37,11 +40,41 @@ functions:
         Resource: "*"
       - Effect: Allow
         Action: cognito-idp:AdminGetUser
-        Resource: arn:aws:cognito-idp:us-west-2:${self:custom.accountId}:userpool/${self:custom.userPoolId}
+        Resource: arn:aws:cognito-idp:${self:provider.region}:${self:custom.accountId}:userpool/${self:custom.userPoolId}
+  
   verifyAuthChallenge:
     handler: src/lambda/VerifyAuthChallenge/index.handler
     environment: 
       COGNITO_REGION: ${self:provider.region}
-      DYNAMO_TABLENAME: TODO
+      DYNAMO_TABLENAME: ${self:custom.dynamoTableName}
       MAX_VALID_TIME_DEVICE: ${self:custom.maxValidTimeDevice}
       USER_POOL_ID: ${self:custom.userPoolId}
+    iamRoleStatements:
+      - Effect: Allow
+        Action: cognito-idp:AdminGetDevice
+        Resource: arn:aws:cognito-idp:${self:provider.region}:${self:custom.accountId}:userpool/${self:custom.userPoolId}
+      - Effect: Allow
+        Action: 
+          - dynamodb:GetItem
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:${self:custom.accountId}:table/${self:custom.dynamoTableName}
+
+resources:
+  Resources:
+    dynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: Username
+            AttributeType: S
+          - AttributeName: DeviceId
+            AttributeType: S            
+        KeySchema:
+          - AttributeName: Username
+            KeyType: HASH
+          - AttributeName: DeviceId
+            KeyType: RANGE            
+        ProvisionedThroughput:
+          ReadCapacityUnits: '5'
+          WriteCapacityUnits: '5'
+        TableName: ${self:custom.dynamoTableName}
