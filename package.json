@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "Cognito funcitons to support custom authentication flow for CWDS-CARES",
   "scripts": {
+    "develop": "npm-run-all --parallel security-check lint:watch test",
+    "license-dump": "license-checker --csv --out legal/licenses.csv",
     "lint": "esw webpack.config.* src --color",
     "lint:watch": "npm run lint -- --watch",
     "test": "jest --env=jsdom",
