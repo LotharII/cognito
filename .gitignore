@@ -38,3 +38,9 @@ dist
 
 # Mac files
 .DS_Store
+
+# Serverless directories
+.serverless
+
+# Webpack directories
+.webpack

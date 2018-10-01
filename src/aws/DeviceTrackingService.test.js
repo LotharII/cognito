@@ -209,7 +209,7 @@ describe('DeviceTrackingService.js Tests', () => {
 
       //assert
       expect(event.response.answerCorrect, 'answerCorrect not correct').to.be.false;
-      expect(succeed.calledOnce, 'succeed not called').to.betrue;
+      expect(succeed.calledOnce, 'succeed not called').to.be.true;
     });
 
     describe('- manageVerifiedDevice Tests update true', () => {
@@ -338,7 +338,7 @@ describe('DeviceTrackingService.js Tests', () => {
       let value = DeviceTrackingService.overAllowedAge(time);
 
       //assert
-      expect(value).to.equal.false;
+      expect(value).to.be.false;
     });
   });
 

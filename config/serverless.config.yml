@@ -1,0 +1,8 @@
+preint:
+  aws:
+    ACCOUNT_ID: 601945887740
+    REGION: us-west-2
+    USER_POOL_ID: us-west-2_WFlleo4Tl
+    SOURCE_EMAIL: no-reply@cwds.ca.gov
+    AUTOMATION_OTP: LETMEIN
+    MAX_VALID_TIME_DEVICE: 86400000
