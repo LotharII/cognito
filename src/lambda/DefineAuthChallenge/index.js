@@ -19,9 +19,17 @@ exports.handler = function(event, context) {
             event.response.issueTokens = true;
             event.response.failAuthentication = false;
         }
-    } else if (event.request.session.length === 4 && event.request.session[3].challengeName === 'CUSTOM_CHALLENGE' && event.request.session[3].challengeResult === true) {
-        event.response.issueTokens = true;
-        event.response.failAuthentication = false;
+    } else if (event.request.session.length >= 4 && event.request.session.length <= 6) {
+        // length between 4 and 6 will allow 3 MFA code attempts. 
+        const i = event.request.session.length - 1; 
+        if ( event.request.session[i].challengeName === 'CUSTOM_CHALLENGE' && event.request.session[i].challengeResult === true) {
+            event.response.issueTokens = true;
+            event.response.failAuthentication = false;
+        } else {
+            event.response.issueTokens = false;
+            event.response.failAuthentication = false;
+            event.response.challengeName = 'CUSTOM_CHALLENGE';
+        }
     } else {
         event.response.issueTokens = false;
         event.response.failAuthentication = true;

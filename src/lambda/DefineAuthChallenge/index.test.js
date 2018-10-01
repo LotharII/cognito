@@ -143,9 +143,43 @@ describe('DefineCustomAuth Tests', () => {
     expect(done.calledOnce).to.equals(true);
   });
 
-  it('should fail auth if unsuccessful one time password check', () => {
+  it('should not fail auth for first unsuccessful one time password check', () => {
     //setup
     let testSession = [baseSession, baseSession, baseSession, Object.assign({}, baseSession, {challengeName: 'CUSTOM_CHALLENGE', challengeResult: false})];
+    let testRequest = Object.assign({}, baseRequest, {session: testSession});
+    let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: Object.assign({}, baseResponse)});
+
+    //run
+    DefineAuthChallenge.handler(testEvent, context);
+
+    //assert
+    expect(testEvent.response.challengeName).to.equals('CUSTOM_CHALLENGE');
+    expect(testEvent.response.issueTokens).to.equals(false);
+    expect(testEvent.response.failAuthentication).to.equals(false);
+    expect(done.calledOnce).to.equals(true);
+  });
+
+  it('should not fail auth if <= n (n=3) unsuccessful one time password check', () => {
+    //setup
+    let testSession = [baseSession, baseSession, baseSession, baseSession, baseSession,
+                      Object.assign({}, baseSession, {challengeName: 'CUSTOM_CHALLENGE', challengeResult: false})];
+    let testRequest = Object.assign({}, baseRequest, {session: testSession});
+    let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: Object.assign({}, baseResponse)});
+
+    //run
+    DefineAuthChallenge.handler(testEvent, context);
+
+    //assert
+    expect(testEvent.response.challengeName).to.equals('CUSTOM_CHALLENGE');
+    expect(testEvent.response.issueTokens).to.equals(false);
+    expect(testEvent.response.failAuthentication).to.equals(false);
+    expect(done.calledOnce).to.equals(true);
+  });
+
+  it('should fail auth if > n (n=3) unsuccessful one time password check', () => {
+    //setup
+    let testSession = [baseSession, baseSession, baseSession, baseSession, baseSession, baseSession,
+                      Object.assign({}, baseSession, {challengeName: 'CUSTOM_CHALLENGE', challengeResult: false})];
     let testRequest = Object.assign({}, baseRequest, {session: testSession});
     let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: Object.assign({}, baseResponse)});
 
@@ -158,6 +192,7 @@ describe('DefineCustomAuth Tests', () => {
     expect(testEvent.response.failAuthentication).to.equals(true);
     expect(done.calledOnce).to.equals(true);
   });
+
 });
 
 const baseResponse = {
