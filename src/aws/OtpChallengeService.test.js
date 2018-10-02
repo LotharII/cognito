@@ -65,8 +65,7 @@ describe('OtpChallengeService Tests', () => {
     });
 
     it('sets OTP correct for automation user', () => {
-        //setup
-        let testRequest = Object.assign({}, baseRequest, {});
+        let testRequest = Object.assign({}, baseRequest, {session: [{challengeMetadata: 'UNIQUE-KEY'}]});
         let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: {}});
         const email = 'abc@example.com';
         const user = {
@@ -90,8 +89,7 @@ describe('OtpChallengeService Tests', () => {
       });
 
       it('sets OTP correct for non automation user', () => {
-        //setup
-        let testRequest = Object.assign({}, baseRequest, {});
+       let testRequest = Object.assign({}, baseRequest, {session: [{challengeMetadata: 'UNIQUE-KEY'}]});
         let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: {}});
         const email = 'abc@example.com';
         const user = {
@@ -116,7 +114,7 @@ describe('OtpChallengeService Tests', () => {
 
       it('calls send email', () => {
         //setup
-        let testRequest = Object.assign({}, baseRequest, {});
+        let testRequest = Object.assign({}, baseRequest, {session: [{challengeMetadata: 'UNIQUE-KEY'}]});
         let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: {}});
         const email = 'abc@example.com';
         const user = {
@@ -144,7 +142,7 @@ describe('OtpChallengeService Tests', () => {
         expect(sendEmailFake.args[0][3], '4th function parameter incorrect').to.equal(context);
       });
 
-    it('sets up otp challenge metadata correctly', () => {
+    it('sets up otp challenge metadata to blank when request challenge metadata is null', () => {
         //setup
         let testRequest = Object.assign({}, baseRequest, {});
         let testEvent = Object.assign({}, baseEvent, {request: testRequest, response: {}});
@@ -165,8 +163,9 @@ describe('OtpChallengeService Tests', () => {
         OtpChallengeService.setupOtpChallenge(email, testEvent, context);
 
         //assert
-        expect(testEvent.response.challengeMetadata).to.equal('OTP_CHALLENGE');
+        expect(testEvent.response.challengeMetadata).to.equal('');
     });
+
 
   });
 });

@@ -19,7 +19,7 @@ exports.handler = function(event, context) {
 
 function shouldDoOtpChallenge(lastSession) {
     //if challengeMetadata is no empty we have already gotten the deviceId
-    return lastSession.challengeMetadata;
+    return lastSession.challengeMetadata && lastSession.challengeMetadata.startsWith('UNIQUE-KEY');
 }
 
 
