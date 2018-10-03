@@ -31,7 +31,7 @@ exports.setupOtpChallenge = function(email, event, context) {
             if (event.request.session) {
                 incomingMetadata = event.request.session[event.request.session.length - 1].challengeMetadata;
             }
-            
+
             if (incomingMetadata.startsWith('UNIQUE-KEY')) {
               
                 if (found && found.Value === 't') {
