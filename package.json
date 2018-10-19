@@ -4,9 +4,7 @@
   "description": "Cognito funcitons to support custom authentication flow for CWDS-CARES",
   "scripts": {
     "build-define": "build-for-lambda --in src/lambda/DefineAuthChallenge/index.js --name handler --out dist/define/index.js",
-    "aws-sdk-mock": "^4.1.0",
     "build-create": "build-for-lambda --in src/lambda/CreateAuthChallenge/index.js --name handler --out dist/create/index.js",
-    "babel-core": "^6.25.0",
     "build-verify": "build-for-lambda --in src/lambda/VerifyAuthChallenge/index.js --name handler --out dist/verify/index.js",
     "build": "npm-run-all prebuild build-define build-create build-verify",
     "clean-dist": "rimraf ./dist && mkdir dist",
